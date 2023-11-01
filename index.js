@@ -1,1 +1,3 @@
-// Vai ser o primeiro arquivo aberto pelo arquivo de pacotes do Node
+import touch from "./touchme.js";
+
+console.log(touch.doReq());
