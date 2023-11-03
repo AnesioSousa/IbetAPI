@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -47,6 +49,18 @@ app.use("/rateio", rateio);
 app.use("/aposta", aposta);
 app.use("/deposito", deposito);
 app.use("/saque", saque);
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
 
 app.post("/signup", async (req, res) => {
   const password = await bcrypt.hash(req.body.password, 8);
