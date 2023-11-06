@@ -1,10 +1,9 @@
 //const apiKey = process.env.API_KEY || 'default-api-key';
-const sql = require("./app/models/db");
 require("dotenv").config();
+const sql = require("./app/models/db");
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const { promisify } = require("util");
-
 const app = express();
 const bcrypt = require("bcryptjs");
 
@@ -55,19 +54,18 @@ app.post("/login", async (req, res) => {
         const user = JSON.parse(JSON.stringify(row));
         console.log(user);
         const accessToken = generateAccessToken(user);
-        const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
-          expiresIn: 60,
+        const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+        const refreshToken = jwt.sign(user, refreshTokenSecret, {
+          expiresIn: `${process.env.REFRESH_TOKEN_EXPIRATION}`,
         });
         refreshTokens.push(refreshToken);
         res
           .status(200)
           .json({ accessToken: accessToken, refreshToken: refreshToken });
-      } else {
-        res.status(404).json({ error: "Usuário não encontrado." });
       }
     } catch (err) {
       console.error(`Database Error: ${err}`);
-      res.status(500).json({ error: "Erro no servidor." });
+      res.status(500).json({ error: `Database Error: ${err}` });
     }
   } catch (error) {
     console.error(error);
