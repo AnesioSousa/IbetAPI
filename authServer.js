@@ -1,5 +1,5 @@
 //const apiKey = process.env.API_KEY || 'default-api-key';
-
+const sql = require("./app/models/db");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const express = require("express");
@@ -23,38 +23,19 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  //Tem que vir do banco de dados
-  if (req.body.email != "example@gmail.com") {
-    return res.status(400).json({
-      erro: true,
-      mensagem: "Error: Username or password incorrect! e-mail incorrect!",
-    });
-  }
+  try {
+    let body = await req.body;
 
-  if (
-    !(await bcrypt.compare(
-      req.body.password,
-      "$2a$08$YUuYWodvv6OLaJ436Joxa.4/zVinose6urphA09MzBW0HNImE2AEu"
-    ))
-  ) {
-    return res.status(400).json({
-      erro: true,
-      mensagem: "Error: Username or password incorrect! Password incorrect!",
-    });
+    // Pelo menos um dos campos 'email' ou 'password' é considerado "falsy"
+    if (!body.email || !body.password) {
+      return res.status(400).json({
+        error:
+          "Algum campo obrigatório não foi enviado. Por favor verifique os dados e tente novamente.",
+      });
+    }
+  } catch (error) {
+    console.error(error);
   }
-  //O id vem do banco
-  // "@@KJKSZPJ1212" é a assinatura usada em todos os tokens
-  let token = jwt.sign({ id: 1 }, "@@KJKSZPJ1212", {
-    //expiresIn: 60  //1 minute
-    expiresIn: 600, //10 minutes
-    //expiresIn: '7d' // 7 days
-  });
-
-  return res.json({
-    error: false,
-    message: "You are successfully logged!",
-    token,
-  });
 });
 
 module.exports = {
