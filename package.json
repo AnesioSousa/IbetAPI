@@ -9,7 +9,7 @@
   "scripts": {
     "api": "node server.js",
     "auth": "node authServer.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
   "homepage": "https://github.com/alexsami-uefs/Ibet#readme",
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.0.1"
   }
 }
