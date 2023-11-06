@@ -12,6 +12,8 @@ app.use(express.json());
 // parse reqs of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
+let refreshTokens = [];
+
 app.post("/signup", async (req, res) => {
   const password = await bcrypt.hash(req.body.password, 8);
   console.log(password);
@@ -49,8 +51,17 @@ app.post("/login", async (req, res) => {
       });
 
       if (query.length > 0) {
-        // User found, you can return the user's data or generate a token here
-        res.status(200).json({ user: query[0] });
+        const row = query[0];
+        const user = JSON.parse(JSON.stringify(row));
+        console.log(user);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {
+          expiresIn: 60,
+        });
+        refreshTokens.push(refreshToken);
+        res
+          .status(200)
+          .json({ accessToken: accessToken, refreshToken: refreshToken });
       } else {
         res.status(404).json({ error: "Usuário não encontrado." });
       }
@@ -64,6 +75,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 60 });
+}
 module.exports = {
   eAdmin: async function (req, res, next) {
     const authHeader = req.headers.authorization;
