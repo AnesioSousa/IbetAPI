@@ -52,7 +52,6 @@ app.post("/login", async (req, res) => {
       if (query.length > 0) {
         const row = query[0];
         const user = JSON.parse(JSON.stringify(row));
-        console.log(user);
         const accessToken = generateAccessToken(user);
         const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
         const refreshToken = jwt.sign(user, refreshTokenSecret, {
@@ -62,6 +61,8 @@ app.post("/login", async (req, res) => {
         res
           .status(200)
           .json({ accessToken: accessToken, refreshToken: refreshToken });
+      } else {
+        res.status(400).json({ error: "NotFound!" });
       }
     } catch (err) {
       console.error(`Database Error: ${err}`);
