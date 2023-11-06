@@ -24,43 +24,43 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    let body = await req.body;
-    //IDEIA: usar HTTPS!
-    //IDEIA: pessoa ter id!
-    // IDEIA: restringir pra 2 campos e somente 2 campos no body!
-    // Pelo menos um dos campos 'email' ou 'password' é considerado "falsy"
-    if (!body.email || !body.password) {
+    const { email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password) {
       return res.status(400).json({
-        error:
-          "Algum campo obrigatório não foi enviado. Por favor verifique os dados e tente novamente.",
+        error: "Por favor, forneça o email e a senha.",
       });
     }
 
     try {
       const query = await new Promise((resolve, reject) => {
         sql.query(
-          `SELECT * FROM Pessoa WHERE email = ?`,
-          [body.email],
-          (err, res) => {
+          "SELECT * FROM Pessoa WHERE email = ?",
+          [email],
+          (err, results) => {
             if (err) {
               reject(err);
               return;
             }
-            resolve(res);
+            resolve(results);
           }
         );
       });
 
       if (query.length > 0) {
-        console.log(`Usuário encontrado: ${JSON.stringify(query[0])}`);
+        // User found, you can return the user's data or generate a token here
+        res.status(200).json({ user: query[0] });
       } else {
-        console.log(`Usuário não encontrado.`);
+        res.status(404).json({ error: "Usuário não encontrado." });
       }
     } catch (err) {
-      console.error(`Error: ${err}`);
+      console.error(`Database Error: ${err}`);
+      res.status(500).json({ error: "Erro no servidor." });
     }
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Erro no servidor." });
   }
 });
 
