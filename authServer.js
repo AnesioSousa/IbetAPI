@@ -13,6 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 
 let refreshTokens = [];
 
+app.post("/token", async (req, res) => {
+  const refreshToken = req.body.token;
+});
+
 app.post("/signup", async (req, res) => {
   const password = await bcrypt.hash(req.body.password, 8);
   console.log(password);
@@ -77,8 +81,9 @@ app.post("/login", async (req, res) => {
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 60 });
 }
+/*
 module.exports = {
-  eAdmin: async function (req, res, next) {
+  secureRoute: async function (req, res, next) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -114,10 +119,10 @@ module.exports = {
     }
   },
 };
-
+*/
 // define a porta e fica a espera de requisições
-const PORT = process.env.SERVER_AUTH_PORT;
+const PORT = 3309;
 
 app.listen(PORT, () => {
-  console.log(`O servidor está em execução na porta ${PORT}.`);
+  console.log(`O servidor está em execução na portaa ${PORT}.`);
 });

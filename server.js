@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
+const jwt = require("jsonwebtoken");
 const apostador = require("./app/routes/apostador.js");
 const aposta = require("./app/routes/aposta.js");
 const administrador = require("./app/routes/administrador.js");
@@ -14,11 +14,13 @@ const rateio = require("./app/routes/rateio.js");
 const deposito = require("./app/routes/deposito.js");
 const saque = require("./app/routes/saque.js");
 
-const { eAdmin } = require("./app/middleware/auth");
 const { faker } = require("@faker-js/faker/locale/pt_BR");
 
 const corsOptions = {
-  origin: ["http://localhost:5500", "http://localhost:3309"],
+  origin: [
+    "http://localhost:5500",
+    `http://localhost:${process.env.SERVER_AUTH_PORT}`,
+  ],
 };
 
 app.use(cors(corsOptions));
@@ -29,18 +31,15 @@ app.use(express.json());
 // parse reqs of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-//ROTAS
-// É só colocar "eAdmin" como parâmetro na rota que precisa de segurança
-
-app.get("/", eAdmin, async (req, res) => {
+app.get("/", authenticateToken, async (req, res) => {
   res.json({
     mensagem: "Welcome to IBet",
     id_user: req.userId,
   });
 });
 
-app.use("/apostador", eAdmin, apostador);
-app.use("/administrador", eAdmin, administrador);
+app.use("/apostador", authenticateToken, apostador);
+app.use("/administrador", authenticateToken, administrador);
 app.use("/funcionario", funcionario);
 app.use("/time", time);
 app.use("/contaBancaria", contaBancaria);
@@ -61,6 +60,9 @@ function authenticateToken(req, res, next) {
   });
 }
 
+// define a porta e fica a espera de requisições
+const PORT = 3307;
+
 app.listen(PORT, () => {
-  console.log(`O servidor está em execução na porta ${PORT}.`);
+  console.log(`O servidor está em execução na podasdasdasdsa@@rta ${PORT}.`);
 });
