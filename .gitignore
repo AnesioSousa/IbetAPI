@@ -2,3 +2,4 @@ node_modules/
 commands.md
 .env
 jim.js
+package-lock.json
