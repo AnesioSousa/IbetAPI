@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
+
 const apostador = require("./app/routes/apostador.js");
 const aposta = require("./app/routes/aposta.js");
 const administrador = require("./app/routes/administrador.js");
@@ -13,8 +14,6 @@ const contaBancaria = require("./app/routes/contaBancaria.js");
 const rateio = require("./app/routes/rateio.js");
 const deposito = require("./app/routes/deposito.js");
 const saque = require("./app/routes/saque.js");
-
-const { faker } = require("@faker-js/faker/locale/pt_BR");
 
 const corsOptions = {
   origin: [
@@ -77,9 +76,6 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// define a porta e fica a espera de requisições
-const PORT = 3307;
-
-app.listen(PORT, () => {
-  console.log(`O servidor está em execução na podasdasdasdsa@@rta ${PORT}.`);
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`O servidor está em execução na porta ${process.env.SERVER_PORT}.`);
 });
