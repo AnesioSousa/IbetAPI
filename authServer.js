@@ -120,9 +120,7 @@ module.exports = {
   },
 };
 */
-// define a porta e fica a espera de requisições
-const PORT = 3309;
 
-app.listen(PORT, () => {
-  console.log(`O servidor está em execução na portaa ${PORT}.`);
+app.listen(process.env.SERVER_AUTH_PORT, () => {
+  console.log(`O servidor está em execução na porta ${process.env.SERVER_AUTH_PORT}.`);
 });
