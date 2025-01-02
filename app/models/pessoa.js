@@ -14,7 +14,7 @@ const Pessoa = function(pessoa) {
 };
 
 Pessoa.create = (newPessoa, result) => {
-    sql.query("INSERT INTO pessoa SET ?", newPessoa, (err, res) => {
+    sql.query("INSERT INTO Pessoa SET ?", newPessoa, (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
