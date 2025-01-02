@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `heroku_9ef21a1cfe70e93` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `heroku_9ef21a1cfe70e93`;
+CREATE DATABASE  IF NOT EXISTS `ibet` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ibet`;
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
--- Host: us-cdbr-east-06.cleardb.net    Database: heroku_9ef21a1cfe70e93
+-- Host: us-cdbr-east-06.cleardb.net    Database: ibet
 -- ------------------------------------------------------
 -- Server version	5.6.50-log
 
